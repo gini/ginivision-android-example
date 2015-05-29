@@ -1,0 +1,12 @@
+/build
+aar
+libs
+
+# IntelliJ
+.idea/
+*.iml
+*.ipr
+
+# Gradle
+.gradle
+local.properties
