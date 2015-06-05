@@ -141,16 +141,19 @@ public class StartActivity extends Activity {
 
         if (requestCode == IMAGE_REQUEST && data != null) {
             documentBundle = data.getBundleExtra(ScannerActivity.EXTRA_DOCUMENT_BUNDLE);
-            originalFuture = documentBundle.getParcelable(CaptureActivity.EXTRA_ORIGINAL);
-            rectifiedFuture = documentBundle.getParcelable(CaptureActivity.EXTRA_DOCUMENT);
+            if (documentBundle != null) {
+                originalFuture = documentBundle.getParcelable(CaptureActivity.EXTRA_ORIGINAL);
+                rectifiedFuture = documentBundle.getParcelable(CaptureActivity.EXTRA_DOCUMENT);
+            }
         }
+
         if (requestCode == IMAGE_REQUEST && resultCode == RESULT_OK) {
             final String imageFilename = getImageFilename();
 
-            if (shouldStoreOriginal) {
+            if (shouldStoreOriginal && originalFuture != null) {
                 storeImage(originalFuture.get(), imageFilename + "_original.jpg");
             }
-            if (shouldStoreRectified) {
+            if (shouldStoreRectified && rectifiedFuture != null) {
                 storeImage(rectifiedFuture.get(), imageFilename + "_rectified.jpg");
             }
 
