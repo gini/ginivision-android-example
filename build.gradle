@@ -55,7 +55,7 @@ dependencies {
     compile ('net.gini:ginivision-android-sdk:1.0.114@aar'){
         transitive = true
     }
-    compile ('net.gini:gini-android-sdk:1.0.5@aar'){
+    compile ('net.gini:gini-android-sdk:1.1.11@aar'){
         transitive = true
     }
 
