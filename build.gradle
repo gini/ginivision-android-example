@@ -31,7 +31,7 @@ android {
         minSdkVersion 14
         targetSdkVersion 22
         versionCode 1
-        versionName "1.2.18"
+        versionName "1.2.22"
     }
     packagingOptions {
         exclude 'META-INF/LICENSE.txt'
@@ -52,7 +52,7 @@ android {
 
 dependencies {
 
-    compile ('net.gini:ginivision-android-sdk:1.0.136@aar'){
+    compile ('net.gini:ginivision-android-sdk:1.0.148@aar'){
         transitive = true
     }
     compile ('net.gini:gini-android-sdk:1.1.33@aar'){
