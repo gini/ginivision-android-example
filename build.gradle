@@ -31,7 +31,7 @@ android {
         minSdkVersion 14
         targetSdkVersion 22
         versionCode 1
-        versionName "1.2.26"
+        versionName "1.2.27"
     }
     packagingOptions {
         exclude 'META-INF/LICENSE.txt'
