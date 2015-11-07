@@ -39,8 +39,8 @@ public class UploadActivity extends net.gini.android.vision.UploadActivity {
 
     public void uploadDocument(final Bitmap document) {
         final Intent intent = getIntent();
-        final Bundle documentTypeBundle = intent.getBundleExtra(EXTRA_DOCUMENT_TYPE_BUNDLE);
-        final DocumentType documentType = documentTypeBundle.getParcelable(EXTRA_DOCUMENT_TYPE);
+        final Bundle documentTypeBundle = intent.getBundleExtra(EXTRA_DOCTYPE_BUNDLE);
+        final DocumentType documentType = documentTypeBundle.getParcelable(EXTRA_DOCTYPE);
         documentTaskManager.createDocument(document, null, documentType.getApiDocTypeHint(), 50)
                 .onSuccessTask(new Continuation<Document, Task<Document>>() {
                     @Override

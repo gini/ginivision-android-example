@@ -16,6 +16,7 @@ import android.widget.Toast;
 import net.gini.android.vision.BitmapFuture;
 import net.gini.android.vision.CaptureActivity;
 import net.gini.android.vision.ScannerActivity;
+import net.gini.android.vision.ScannerActivityDelegate;
 import net.hockeyapp.android.CrashManager;
 
 import java.io.File;
@@ -166,7 +167,7 @@ public class StartActivity extends Activity {
                                   extractionsBundle);
             startActivity(resultIntent);
         } else if (requestCode == IMAGE_REQUEST && resultCode == ScannerActivity.RESULT_ERROR) {
-            final ScannerActivity.Error error = data.getParcelableExtra(ScannerActivity.EXTRA_ERROR);
+            final ScannerActivityDelegate.Error error = data.getParcelableExtra(ScannerActivity.EXTRA_ERROR);
             final Toast toast = Toast.makeText(this, "Error! " + error.toString(), Toast.LENGTH_LONG);
             toast.show();
         } else if (requestCode == IMAGE_REQUEST && resultCode == UploadActivity.RESULT_UPLOAD_ERROR) {
@@ -177,10 +178,10 @@ public class StartActivity extends Activity {
     }
 
     public void scanDocument(View view) {
-        Intent scanIntent = new Intent(this, CaptureActivity.class);
-        scanIntent.putExtra(CaptureActivity.EXTRA_STORE_ORIGINAL, shouldStoreOriginal);
+        Intent scanIntent = new Intent(this, ScannerActivity.class);
+        scanIntent.putExtra(ScannerActivity.EXTRA_STORE_ORIGINAL, shouldStoreOriginal);
         scanIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-        CaptureActivity.setUploadActivityExtra(scanIntent, this, UploadActivity.class);
+        ScannerActivity.setUploadActivityExtra(scanIntent, this, UploadActivity.class);
         startActivityForResult(scanIntent, IMAGE_REQUEST);
     }
 }
