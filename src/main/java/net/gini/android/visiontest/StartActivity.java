@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import net.gini.android.vision.BitmapFuture;
 import net.gini.android.vision.CaptureActivity;
+import net.gini.android.vision.DocumentType;
 import net.gini.android.vision.ScannerActivity;
 import net.gini.android.vision.ScannerActivityDelegate;
 import net.hockeyapp.android.CrashManager;
@@ -43,19 +44,19 @@ public class StartActivity extends Activity {
 
         setContentView(R.layout.activity_start);
 
-        ((Switch)findViewById(R.id.store_original)).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        ((Switch) findViewById(R.id.store_original)).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 shouldStoreOriginal = isChecked;
             }
         });
-        ((Switch)findViewById(R.id.store_rectified)).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        ((Switch) findViewById(R.id.store_rectified)).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 shouldStoreRectified = isChecked;
             }
         });
-        ((Switch)findViewById(R.id.enable_logging)).setOnCheckedChangeListener(
+        ((Switch) findViewById(R.id.enable_logging)).setOnCheckedChangeListener(
                 new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -68,7 +69,7 @@ public class StartActivity extends Activity {
                 });
 
         logbackConfigurator.configureBasicLogging();
-        ((TextView)findViewById(R.id.version_number)).setText(getVersion());
+        ((TextView) findViewById(R.id.version_number)).setText(getVersion());
 
         if (!fitsGiniVisionRequirements(this)) {
             final Toast toast = Toast.makeText(this, "Device not supported by Gini Vision", Toast.LENGTH_LONG);
@@ -160,11 +161,11 @@ public class StartActivity extends Activity {
 
             final Intent resultIntent = new Intent(this, ResultsActivity.class);
             resultIntent.putExtra(ResultsActivity.EXTRA_DOCUMENT,
-                                  data.getStringExtra(UploadActivity.EXTRA_DOCUMENT));
+                    data.getStringExtra(UploadActivity.EXTRA_DOCUMENT));
 
             final Bundle extractionsBundle = data.getBundleExtra(ResultsActivity.EXTRA_EXTRACTIONS);
             resultIntent.putExtra(ResultsActivity.EXTRA_EXTRACTIONS,
-                                  extractionsBundle);
+                    extractionsBundle);
             startActivity(resultIntent);
         } else if (requestCode == IMAGE_REQUEST && resultCode == ScannerActivity.RESULT_ERROR) {
             final ScannerActivityDelegate.Error error = data.getParcelableExtra(ScannerActivity.EXTRA_ERROR);
@@ -178,10 +179,21 @@ public class StartActivity extends Activity {
     }
 
     public void scanDocument(View view) {
-        Intent scanIntent = new Intent(this, ScannerActivity.class);
-        scanIntent.putExtra(ScannerActivity.EXTRA_STORE_ORIGINAL, shouldStoreOriginal);
-        scanIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-        ScannerActivity.setUploadActivityExtra(scanIntent, this, UploadActivity.class);
-        startActivityForResult(scanIntent, IMAGE_REQUEST);
+        Intent captureActivity = new Intent(this, CaptureActivity.class);
+        captureActivity.putExtra(CaptureActivity.EXTRA_STORE_ORIGINAL, shouldStoreOriginal);
+        captureActivity.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        ScannerActivity.setUploadActivityExtra(captureActivity, this, UploadActivity.class);
+        startActivityForResult(captureActivity, IMAGE_REQUEST);
+
+        // Comment the code above and uncomment the following to start the scanner directly.
+//        Intent scanIntent = new Intent(this, ScannerActivity.class);
+//        scanIntent.putExtra(ScannerActivity.EXTRA_STORE_ORIGINAL, shouldStoreOriginal);
+//        scanIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+//        final Bundle docTypeBundle = new Bundle();
+//        // Change the DocumenType as required
+//        docTypeBundle.putParcelable(ScannerActivity.EXTRA_DOCTYPE, DocumentType.INVOICE);
+//        scanIntent.putExtra(ScannerActivity.EXTRA_DOCTYPE_BUNDLE, docTypeBundle);
+//        ScannerActivity.setUploadActivityExtra(scanIntent, this, UploadActivity.class);
+//        startActivityForResult(scanIntent, IMAGE_REQUEST);
     }
 }
