@@ -14,6 +14,15 @@ and replace the values of the *gini_api_client_id* and
 to technical-support@gini.net if you haven't received credentials
 yet.
 
+Resolve dependencies
+--------------------
+
+The GiniVision SDK is protected and can be resolved by gradle only if you provide a username and password:
+
+```
+   $ ./gradlew -PginiRepoUser="your_username" -PginiRepoPassword="your_password"
+```
+
 Build & Install the App
 -----------------------
 
