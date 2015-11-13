@@ -15,7 +15,6 @@ import android.widget.Toast;
 
 import net.gini.android.vision.BitmapFuture;
 import net.gini.android.vision.CaptureActivity;
-import net.gini.android.vision.DocumentType;
 import net.gini.android.vision.ScannerActivity;
 import net.gini.android.vision.ScannerActivityDelegate;
 import net.hockeyapp.android.CrashManager;
