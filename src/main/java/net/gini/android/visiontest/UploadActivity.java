@@ -46,7 +46,20 @@ public class UploadActivity extends net.gini.android.vision.UploadActivity {
             if (docType != null) documentType = docType;
         }
 
-        documentTaskManager.createDocument(document, null, documentType.getApiDocTypeHint(), 50)
+        DocumentTaskManager.DocumentType docType = null;
+        switch (documentType) {
+            case INVOICE:
+                docType = DocumentTaskManager.DocumentType.INVOICE;
+                break;
+            case REMITTANCE_SLIP:
+                docType = DocumentTaskManager.DocumentType.REMITTANCE_SLIP;
+                break;
+            case INTEGRATED_REMITTANCE_SLIP:
+                docType = DocumentTaskManager.DocumentType.REMITTANCE_SLIP;
+                break;
+        }
+
+        documentTaskManager.createDocument(document, null, docType)
                 .onSuccessTask(new Continuation<Document, Task<Document>>() {
                     @Override
                     public Task<Document> then(Task<Document> task) throws Exception {
