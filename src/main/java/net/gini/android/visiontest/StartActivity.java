@@ -180,6 +180,7 @@ public class StartActivity extends Activity {
     public void scanDocument(View view) {
         Intent captureActivity = new Intent(this, CaptureActivity.class);
         captureActivity.putExtra(CaptureActivity.EXTRA_STORE_ORIGINAL, shouldStoreOriginal);
+        captureActivity.putExtra(CaptureActivity.EXTRA_SET_WINDOW_FLAG_SECURE, false);
         captureActivity.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         ScannerActivity.setUploadActivityExtra(captureActivity, this, UploadActivity.class);
         startActivityForResult(captureActivity, IMAGE_REQUEST);
@@ -187,6 +188,7 @@ public class StartActivity extends Activity {
         // Comment the code above and uncomment the following to start the scanner directly.
 //        Intent scanIntent = new Intent(this, ScannerActivity.class);
 //        scanIntent.putExtra(ScannerActivity.EXTRA_STORE_ORIGINAL, shouldStoreOriginal);
+//        scanIntent.putExtra(ScannerActivity.EXTRA_SET_WINDOW_FLAG_SECURE, false);
 //        scanIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 //        final Bundle docTypeBundle = new Bundle();
 //        // Change the DocumenType as required
