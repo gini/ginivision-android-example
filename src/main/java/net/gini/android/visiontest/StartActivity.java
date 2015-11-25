@@ -16,7 +16,6 @@ import android.widget.Toast;
 import net.gini.android.vision.BitmapFuture;
 import net.gini.android.vision.CaptureActivity;
 import net.gini.android.vision.ScannerActivity;
-import net.gini.android.vision.ScannerActivityDelegate;
 import net.hockeyapp.android.CrashManager;
 
 import java.io.File;
@@ -167,7 +166,7 @@ public class StartActivity extends Activity {
                     extractionsBundle);
             startActivity(resultIntent);
         } else if (requestCode == IMAGE_REQUEST && resultCode == ScannerActivity.RESULT_ERROR) {
-            final ScannerActivityDelegate.Error error = data.getParcelableExtra(ScannerActivity.EXTRA_ERROR);
+            final ScannerActivity.Error error = data.getParcelableExtra(ScannerActivity.EXTRA_ERROR);
             final Toast toast = Toast.makeText(this, "Error! " + error.toString(), Toast.LENGTH_LONG);
             toast.show();
         } else if (requestCode == IMAGE_REQUEST && resultCode == UploadActivity.RESULT_UPLOAD_ERROR) {
