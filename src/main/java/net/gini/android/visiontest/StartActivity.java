@@ -1,10 +1,17 @@
 package net.gini.android.visiontest;
 
+import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,10 +32,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-import static net.gini.android.vision.Helpers.fitsGiniVisionRequirements;
-
 
 public class StartActivity extends Activity {
+
+    private static final int PERMISSION_REQUEST_CAMERA = 1;
 
     protected static final int IMAGE_REQUEST = 1;
     protected boolean shouldStoreOriginal = false;
@@ -69,11 +76,11 @@ public class StartActivity extends Activity {
         logbackConfigurator.configureBasicLogging();
         ((TextView) findViewById(R.id.version_number)).setText(getVersion());
 
-        if (!fitsGiniVisionRequirements(this)) {
-            final Toast toast = Toast.makeText(this, "Device not supported by Gini Vision", Toast.LENGTH_LONG);
-            toast.show();
-            finish();
-        }
+//        if (!fitsGiniVisionRequirements(this)) {
+//            final Toast toast = Toast.makeText(this, "Device not supported by Gini Vision", Toast.LENGTH_LONG);
+//            toast.show();
+//            finish();
+//        }
     }
 
     @Override
@@ -177,6 +184,75 @@ public class StartActivity extends Activity {
     }
 
     public void scanDocument(View view) {
+        requestCameraPermission();
+    }
+
+    public void requestCameraPermission() {
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.CAMERA)) {
+                // Show an expanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+
+                AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this)
+                        .setTitle("Camera Permission");
+
+                final Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                        Uri.fromParts("package", getPackageName(), null));
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                if (getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY)
+                        .size() > 0) {
+                    dialogBuilder.setMessage("The app needs the camera, otherwise there is no Vision in GiniVision. Please allow" +
+                            " camera access in the app info screen under Permissions.")
+                            .setPositiveButton("Open app info screen", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    startActivity(intent);
+                                }
+                            });
+                } else {
+                    dialogBuilder.setMessage("The app needs the camera, otherwise there is no Vision in GiniVision.");
+                    dialogBuilder.setPositiveButton("OK", null);
+                }
+
+                dialogBuilder.create().show();
+            } else {
+                // No explanation needed, we can request the permission.
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.CAMERA},
+                        PERMISSION_REQUEST_CAMERA);
+
+                // PERMISSION_REQUEST_CAMERA is an
+                // app-defined int constant. The callback method gets the
+                // result of the request.
+            }
+        } else {
+            startGiniVision();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case PERMISSION_REQUEST_CAMERA:
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    startGiniVision();
+                } else {
+                    Toast.makeText(this, "The app needs the camera, otherwise there is no Vision in GiniVision.",
+                            Toast.LENGTH_LONG).show();
+                }
+                break;
+        }
+    }
+
+    private void startGiniVision() {
         Intent captureActivity = new Intent(this, CaptureActivity.class);
         captureActivity.putExtra(CaptureActivity.EXTRA_STORE_ORIGINAL, shouldStoreOriginal);
         captureActivity.putExtra(CaptureActivity.EXTRA_SET_WINDOW_FLAG_SECURE, false);
