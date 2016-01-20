@@ -22,15 +22,19 @@ import android.widget.Toast;
 
 import net.gini.android.vision.BitmapFuture;
 import net.gini.android.vision.CaptureActivity;
+import net.gini.android.vision.JpegFuture;
 import net.gini.android.vision.ScannerActivity;
 import net.hockeyapp.android.CrashManager;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+
+;
 
 
 public class StartActivity extends Activity {
@@ -40,6 +44,7 @@ public class StartActivity extends Activity {
     protected static final int IMAGE_REQUEST = 1;
     protected boolean shouldStoreOriginal = false;
     protected boolean shouldStoreRectified = false;
+    protected boolean shouldStoreJpeg = false;
     protected LogbackConfigurator logbackConfigurator = new LogbackConfigurator();
 
     @Override
@@ -59,6 +64,12 @@ public class StartActivity extends Activity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 shouldStoreRectified = isChecked;
+            }
+        });
+        ((Switch) findViewById(R.id.store_jpeg)).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                shouldStoreJpeg = isChecked;
             }
         });
         ((Switch) findViewById(R.id.enable_logging)).setOnCheckedChangeListener(
@@ -140,30 +151,48 @@ public class StartActivity extends Activity {
         return imageFile.toString();
     }
 
+    protected String storeImage(final byte[] image, final String filename) {
+        final File storageDirectory = getExternalFilesDir(null);
+        final File imageFile = new File(storageDirectory, filename);
+        try {
+            final FileOutputStream outputStream = new FileOutputStream(imageFile);
+            outputStream.write(image);
+        } catch (IOException e) {
+            e.printStackTrace();
+            Toast toast = Toast.makeText(this, "Could not save image", Toast.LENGTH_LONG);
+            toast.show();
+        }
+        return imageFile.toString();
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         Bundle documentBundle;
         BitmapFuture originalFuture = null;
         BitmapFuture rectifiedFuture = null;
+        JpegFuture jpegFuture = null;
 
         if (requestCode == IMAGE_REQUEST && data != null) {
             documentBundle = data.getBundleExtra(ScannerActivity.EXTRA_DOCUMENT_BUNDLE);
             if (documentBundle != null) {
                 originalFuture = documentBundle.getParcelable(CaptureActivity.EXTRA_ORIGINAL);
                 rectifiedFuture = documentBundle.getParcelable(CaptureActivity.EXTRA_DOCUMENT);
+                jpegFuture = documentBundle.getParcelable(CaptureActivity.EXTRA_DOCUMENT_JPEG);
+
+                final String imageFilename = getImageFilename();
+                if (shouldStoreOriginal && originalFuture != null) {
+                    storeImage(originalFuture.get(), imageFilename + "_original.jpg");
+                }
+                if (shouldStoreRectified && rectifiedFuture != null) {
+                    storeImage(rectifiedFuture.get(), imageFilename + "_rectified.jpg");
+                }
+                if (shouldStoreJpeg && jpegFuture != null) {
+                    storeImage(jpegFuture.get(), imageFilename + "_rectified_exif.jpg");
+                }
             }
         }
 
         if (requestCode == IMAGE_REQUEST && resultCode == RESULT_OK) {
-            final String imageFilename = getImageFilename();
-
-            if (shouldStoreOriginal && originalFuture != null) {
-                storeImage(originalFuture.get(), imageFilename + "_original.jpg");
-            }
-            if (shouldStoreRectified && rectifiedFuture != null) {
-                storeImage(rectifiedFuture.get(), imageFilename + "_rectified.jpg");
-            }
-
             final Intent resultIntent = new Intent(this, ResultsActivity.class);
             resultIntent.putExtra(ResultsActivity.EXTRA_DOCUMENT,
                     data.getStringExtra(UploadActivity.EXTRA_DOCUMENT));
@@ -256,6 +285,7 @@ public class StartActivity extends Activity {
         Intent captureActivity = new Intent(this, CaptureActivity.class);
         captureActivity.putExtra(CaptureActivity.EXTRA_STORE_ORIGINAL, shouldStoreOriginal);
         captureActivity.putExtra(CaptureActivity.EXTRA_SET_WINDOW_FLAG_SECURE, false);
+        captureActivity.putExtra(CaptureActivity.EXTRA_CREATE_JPEG_DOCUMENT_WITH_METADATA, true);
         captureActivity.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         ScannerActivity.setUploadActivityExtra(captureActivity, this, UploadActivity.class);
         startActivityForResult(captureActivity, IMAGE_REQUEST);

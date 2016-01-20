@@ -1,3 +1,4 @@
 <resources>
-<integer name="net.gini.android.vision.show_processing_average">0</integer>
+    <integer name="net.gini.android.vision.show_processing_average">0</integer>
+    <bool name="net.gini.android.vision.upload_activity_indicator">true</bool>
 </resources>

@@ -1,54 +1,82 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingLeft="@dimen/activity_horizontal_margin"
-                android:paddingRight="@dimen/activity_horizontal_margin"
-                android:paddingTop="@dimen/activity_vertical_margin"
-                android:paddingBottom="@dimen/activity_vertical_margin"
-                tools:context=".ScannerActivity">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".ScannerActivity">
 
     <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/imageView"
-            android:layout_alignParentRight="true" android:layout_alignParentEnd="true"
-            android:layout_alignParentLeft="true" android:layout_alignParentStart="true"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentTop="true"
-            />
-    <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="scanDocument"
-            android:src="@drawable/new_scan"
-            android:background="@android:color/transparent"
-            android:id="@+id/button" android:layout_alignParentBottom="true" android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"/>
-    <Switch
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Store original images"
-            android:id="@+id/store_original"
-            android:layout_marginTop="32dp" android:layout_alignTop="@+id/imageView"
-            android:layout_alignRight="@+id/imageView" android:layout_alignEnd="@+id/imageView"/>
-    <Switch
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Store Rectified Images"
-            android:id="@+id/store_rectified" android:layout_below="@+id/store_original" android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" android:layout_marginTop="32dp"/>
-    <Switch
+        android:id="@+id/imageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Enable Logging"
-        android:id="@+id/enable_logging" android:layout_below="@+id/store_rectified" android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" android:layout_marginTop="32dp"/>
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true" />
+
+    <ImageButton
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:background="@android:color/transparent"
+        android:onClick="scanDocument"
+        android:src="@drawable/new_scan" />
+
+    <Switch
+        android:id="@+id/store_original"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/imageView"
+        android:layout_alignRight="@+id/imageView"
+        android:layout_alignTop="@+id/imageView"
+        android:layout_marginTop="32dp"
+        android:text="Store original images" />
+
+    <Switch
+        android:id="@+id/store_rectified"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/store_original"
+        android:layout_marginTop="32dp"
+        android:text="Store Rectified Images" />
+
+    <Switch
+        android:id="@+id/store_jpeg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/store_rectified"
+        android:layout_marginTop="32dp"
+        android:text="Store Jpeg with Metadata" />
+
+    <Switch
+        android:id="@+id/enable_logging"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/store_jpeg"
+        android:layout_marginTop="32dp"
+        android:text="Enable Logging" />
+
     <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:id="@+id/version_number" android:layout_alignBottom="@+id/imageView"
-            android:layout_alignParentLeft="true" android:layout_alignParentStart="true"/>
+        android:id="@+id/version_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/imageView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
 
 </RelativeLayout>
