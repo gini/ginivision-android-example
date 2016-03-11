@@ -34,8 +34,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-;
-
+import static net.gini.android.vision.Helpers.fitsGiniVisionRequirements;
 
 public class StartActivity extends Activity {
 
@@ -86,12 +85,6 @@ public class StartActivity extends Activity {
 
         logbackConfigurator.configureBasicLogging();
         ((TextView) findViewById(R.id.version_number)).setText(getVersion());
-
-//        if (!fitsGiniVisionRequirements(this)) {
-//            final Toast toast = Toast.makeText(this, "Device not supported by Gini Vision", Toast.LENGTH_LONG);
-//            toast.show();
-//            finish();
-//        }
     }
 
     @Override
@@ -282,6 +275,13 @@ public class StartActivity extends Activity {
     }
 
     private void startGiniVision() {
+        // Requirements checked here, to allow requesting the camera permission first
+        if (!fitsGiniVisionRequirements(this)) {
+            final Toast toast = Toast.makeText(this, "Device not supported by Gini Vision", Toast.LENGTH_LONG);
+            toast.show();
+            finish();
+        }
+
         Intent captureActivity = new Intent(this, CaptureActivity.class);
         captureActivity.putExtra(CaptureActivity.EXTRA_STORE_ORIGINAL, shouldStoreOriginal);
         captureActivity.putExtra(CaptureActivity.EXTRA_SET_WINDOW_FLAG_SECURE, false);
