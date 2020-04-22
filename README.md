@@ -1,3 +1,10 @@
+Deprecated
+==========
+
+This example app is deprecated. It shows usage of the deprecated Gini Vision Library 1.0.
+
+Please refer to either the example apps in the Gini Vision Library 2.0+ [repository](https://github.com/gini/gini-vision-lib-android) or our new standalone [example app](https://github.com/gini/gini-vision-lib-android-example).
+
 GiniVision SDK for Android Example App
 ======================================
 
